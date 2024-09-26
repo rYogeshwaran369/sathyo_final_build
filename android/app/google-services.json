@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "696545506494",
+    "firebase_url": "https://sathyodhayam-50d9a-default-rtdb.firebaseio.com",
+    "project_id": "sathyodhayam-50d9a",
+    "storage_bucket": "sathyodhayam-50d9a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696545506494:android:913dd41a7f534209f51aef",
+        "android_client_info": {
+          "package_name": "com.ryogeshwaran.sathyodhayam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChioETdurzlcx8daYzZrpATpfb_Ow9oWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
