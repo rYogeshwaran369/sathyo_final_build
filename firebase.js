@@ -35,4 +35,4 @@ const resetPassword = async (email) => {
   }
 };
 
-export { auth,db ,resetPassword};
+export { auth,db ,resetPassword,app};

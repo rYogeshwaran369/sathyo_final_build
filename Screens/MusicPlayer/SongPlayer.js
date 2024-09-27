@@ -1,80 +1,112 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Button, ActivityIndicator, StyleSheet } from 'react-native';
-import { Audio } from 'expo-av'; 
-import { collection, getDocs, limit, query } from 'firebase/firestore';
-import { db } from "../../firebase";
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { Audio } from 'expo-av';
+import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
+
+import { app } from '../../firebase';
 
 const SongPlayer = () => {
-  const [song, setSong] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [sound, setSound] = useState(null);
+  const [songs, setSongs] = useState([]);
+  const [sound, setSound] = useState();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentSong, setCurrentSong] = useState(null);
 
   useEffect(() => {
-    const fetchFirstSong = async () => {
-      try {
-        const q = query(collection(db, 'jabam'), limit(1));
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          const songData = querySnapshot.docs[0].data();
-          setSong(songData.url); // Assuming 'url' contains the download link for the song
-        } else {
-          console.log('No songs found in the collection');
+    fetchSongs();
+    return sound
+      ? () => {
+          console.log('Unloading Sound');
+          sound.unloadAsync();
         }
-      } catch (error) {
-        console.error('Error fetching song:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchFirstSong();
+      : undefined;
   }, []);
 
-  useEffect(() => {
-    let soundInstance;
-
-    // Play the song when the component mounts
-    const playSong = async () => {
-      if (song) {
-        try {
-          const { sound: newSound } = await Audio.Sound.createAsync(
-            { uri: song },
-            { shouldPlay: true } // Play immediately after loading
-          );
-          setSound(newSound);
-        } catch (error) {
-          console.error('Error loading or playing sound:', error);
-        }
-      }
-    };
-
-    playSong();
-
-    // Clean up the sound instance when the component unmounts
-    return () => {
-      if (soundInstance) {
-        soundInstance.unloadAsync();
-      }
-    };
-  }, [song]);
-
-  const stopSound = async () => {
-    if (sound) {
-      await sound.stopAsync();
+  const fetchSongs = async () => {
+    const storage = getStorage(app);
+    const listRef = ref(storage, 'gs://sathyodhayam-50d9a.appspot.com');
+    
+    try {
+      const res = await listAll(listRef);
+      const songList = await Promise.all(
+        res.items.map(async (itemRef) => {
+          const url = await getDownloadURL(itemRef);
+          return { name: itemRef.name, url };
+        })
+      );
+      setSongs(songList);
+    } catch (error) {
+      console.error("Error fetching songs:", error);
     }
   };
 
+  const playSound = async (song) => {
+    console.log('Loading Sound');
+    try {
+      if (sound) {
+        await sound.unloadAsync();
+      }
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        { uri: song.url },
+        { shouldPlay: true }
+      );
+      setSound(newSound);
+      setIsPlaying(true);
+      setCurrentSong(song);
+
+      newSound.setOnPlaybackStatusUpdate((status) => {
+        if (status.didJustFinish) {
+          setIsPlaying(false);
+        }
+      });
+
+    } catch (error) {
+      console.error("Error playing sound:", error);
+    }
+  };
+
+  const pauseSound = async () => {
+    if (sound) {
+      console.log('Pausing Sound');
+      await sound.pauseAsync();
+      setIsPlaying(false);
+    }
+  };
+
+  const resumeSound = async () => {
+    if (sound) {
+      console.log('Resuming Sound');
+      await sound.playAsync();
+      setIsPlaying(true);
+    }
+  };
+
+  const renderSongItem = ({ item }) => (
+    <TouchableOpacity 
+      style={styles.songItem} 
+      onPress={() => playSound(item)}
+    >
+      <Text>{item.name}</Text>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.container}>
-      {isLoading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : song ? (
-        <>
-          <Text style={styles.text}>Now playing...</Text>
-          <Button title="Stop" onPress={stopSound} />
-        </>
-      ) : (
-        <Text style={styles.text}>No songs found!</Text>
+      <Text style={styles.title}>Music Player</Text>
+      <FlatList
+        data={songs}
+        renderItem={renderSongItem}
+        keyExtractor={(item) => item.name}
+      />
+      {currentSong && (
+        <View style={styles.controls}>
+          <Text>Now Playing: {currentSong.name}</Text>
+          <TouchableOpacity 
+            style={styles.button} 
+            onPress={isPlaying ? pauseSound : resumeSound}
+          >
+            <Text>{isPlaying ? 'Pause' : 'Play'}</Text>
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );
@@ -83,13 +115,27 @@ const SongPlayer = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    padding: 20,
   },
-  text: {
-    fontSize: 18,
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
     marginBottom: 20,
+  },
+  songItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  controls: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  button: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: '#ddd',
+    borderRadius: 5,
   },
 });
 
