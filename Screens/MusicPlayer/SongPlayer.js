@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, ActivityIndicator, StyleSheet } from 'react-native';
-import Sound from 'react-native-sound';
+import { Audio } from 'expo-av'; 
 import { collection, getDocs, limit, query } from 'firebase/firestore';
 import { db } from "../../firebase";
 
@@ -34,32 +34,35 @@ const SongPlayer = () => {
     let soundInstance;
 
     // Play the song when the component mounts
-    if (song) {
-      soundInstance = new Sound(song, Sound.MAIN_BUNDLE, (error) => {
-        if (error) {
-          console.log('Failed to load sound', error);
-          return;
+    const playSong = async () => {
+      if (song) {
+        try {
+          const { sound: newSound } = await Audio.Sound.createAsync(
+            { uri: song },
+            { shouldPlay: true } // Play immediately after loading
+          );
+          setSound(newSound);
+        } catch (error) {
+          console.error('Error loading or playing sound:', error);
         }
-        soundInstance.play((success) => {
-          if (success) {
-            console.log('Successfully finished playing');
-          } else {
-            console.log('Playback failed due to audio decoding errors');
-          }
-        });
-      });
-      setSound(soundInstance);
-    }
+      }
+    };
+
+    playSong();
 
     // Clean up the sound instance when the component unmounts
     return () => {
       if (soundInstance) {
-        soundInstance.stop(() => {
-          soundInstance.release();
-        });
+        soundInstance.unloadAsync();
       }
     };
   }, [song]);
+
+  const stopSound = async () => {
+    if (sound) {
+      await sound.stopAsync();
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -68,7 +71,7 @@ const SongPlayer = () => {
       ) : song ? (
         <>
           <Text style={styles.text}>Now playing...</Text>
-          <Button title="Stop" onPress={() => sound && sound.stop()} />
+          <Button title="Stop" onPress={stopSound} />
         </>
       ) : (
         <Text style={styles.text}>No songs found!</Text>

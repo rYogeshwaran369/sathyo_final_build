@@ -42,6 +42,12 @@
       "@react-native-firebase/auth",
       "@react-native-firebase/crashlytics",
       [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
+        }
+      ],
+      [
         "expo-build-properties",
         {
           "ios": {

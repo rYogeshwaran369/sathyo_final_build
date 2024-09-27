@@ -20,7 +20,8 @@ import InstructorScreen from "../KChat2/Instructor/InstructorScreen";
 import InstructorLobby from "../KChat2/Instructor/InstructorLobby";
 import MeditatorLobby from "../KChat2/Meditator/MeditatorLobby";
 import MeditationTimerAndChat from "../KChat2/MeditationTimerAndChat";
-// import SongPlayer from "../MusicPlayer/SongPlayer";
+import SongPlayer from "../MusicPlayer/SongPlayer";
+import UploadMp3 from "../Upload/UploadMp3";
 
 
 const Stack = createStackNavigator();
@@ -162,14 +163,22 @@ export default function AppStack() {
                 component={MeditationTimerAndChat}
             />
             
-            {/* <Stack.Screen
+            <Stack.Screen
                 name="SongPlayer"
                 options={{
                     headerTitle: '', 
                     header: (props) => <AppHeader {...props} /> 
                 }}
                 component={SongPlayer}
-            /> */}
+            /> 
+            <Stack.Screen
+                name="UploadMp3"
+                options={{
+                    headerTitle: '', 
+                    header: (props) => <AppHeader {...props} /> 
+                }}
+                component={UploadMp3}
+            />
         </Stack.Navigator>
     );
 }
