@@ -13,12 +13,16 @@
     },
     "ios": {
       "bundleIdentifier": "com.ryogeshwaran.sathyodhayam",
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "infoPlist": {
+        "UIBackgroundModes": ["audio"]
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "permissions": ["FOREGROUND_SERVICE"]
       },
       "package": "com.ryogeshwaran.sathyodhayam",
       "googleServicesFile": "./google-services.json"
