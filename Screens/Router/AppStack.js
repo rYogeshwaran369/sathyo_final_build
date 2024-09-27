@@ -20,6 +20,9 @@ import InstructorScreen from "../KChat2/Instructor/InstructorScreen";
 import InstructorLobby from "../KChat2/Instructor/InstructorLobby";
 import MeditatorLobby from "../KChat2/Meditator/MeditatorLobby";
 import MeditationTimerAndChat from "../KChat2/MeditationTimerAndChat";
+// import SongPlayer from "../MusicPlayer/SongPlayer";
+
+
 const Stack = createStackNavigator();
 
 export default function AppStack() {
@@ -138,7 +141,7 @@ export default function AppStack() {
                 name="InstructorLobby"
                 options={{
                     headerTitle: '', 
-                    header: (props) => <AppHeader {...props} /> // Use the custom header
+                    header: (props) => <AppHeader {...props} /> 
                 }}
                 component={InstructorLobby}
             />
@@ -146,7 +149,7 @@ export default function AppStack() {
                 name="MeditatorLobby"
                 options={{
                     headerTitle: '', 
-                    header: (props) => <AppHeader {...props} /> // Use the custom header
+                    header: (props) => <AppHeader {...props} /> 
                 }}
                 component={MeditatorLobby}
             />
@@ -154,10 +157,19 @@ export default function AppStack() {
                 name="MeditationTimerAndChat"
                 options={{
                     headerTitle: '', 
-                    header: (props) => <AppHeader {...props} /> // Use the custom header
+                    header: (props) => <AppHeader {...props} /> 
                 }}
                 component={MeditationTimerAndChat}
             />
+            
+            {/* <Stack.Screen
+                name="SongPlayer"
+                options={{
+                    headerTitle: '', 
+                    header: (props) => <AppHeader {...props} /> 
+                }}
+                component={SongPlayer}
+            /> */}
         </Stack.Navigator>
     );
 }

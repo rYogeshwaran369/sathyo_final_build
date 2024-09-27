@@ -20,7 +20,7 @@ export async function findExisitingRooms() {
     await updateDoc(chatRoomRequestRef, {
       meditatorEmails: arrayUnion(meditatorEmail), 
       status: 'active',
-      timestamp: serverTimestamp(),
+      // timestamp: serverTimestamp(),
     });
 
     console.log('Existing chat room found and updated:', chatRoomDoc.id);

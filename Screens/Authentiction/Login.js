@@ -19,10 +19,18 @@ export default class Login extends Component {
 
   componentDidMount() {
     // Check if the user is already signed in
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // User is signed in, navigate to the Home screen
-        this.props.navigation.navigate('Home');
+        const email = user.email;
+        
+        try {
+          // const userType = await this.getUserTypeByEmail(email);
+          // await this.storeUserType(userType);
+  
+          this.props.navigation.navigate('Home');
+        } catch (error) {
+          console.error("Error fetching user type or storing it:", error);
+        }
       }
     });
   }

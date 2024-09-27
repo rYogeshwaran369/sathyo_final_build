@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Button, View, Text, Alert } from 'react-native';
-import { findAvailableInstructor, requestChatRoom, listenForInstructorResponse } from "../../KChat/Services/ChatService";
 import { sendChatRequest } from '../sendChatRequest';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, db } from "../../../firebase";

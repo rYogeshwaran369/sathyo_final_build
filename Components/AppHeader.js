@@ -208,6 +208,9 @@ export default function AppHeader({ navigation }) {
                     {userType==="Instructor" && <TouchableOpacity style={styles.dropdownItem} onPress={() => navigateTo('InstructorPage')}>
                         <Text style={styles.dropdownText}>Meditation</Text>
                     </TouchableOpacity>}
+                    {userType==="Instructor" && <TouchableOpacity style={styles.dropdownItem} onPress={() => navigateTo('UploadMp3')}>
+                        <Text style={styles.dropdownText}>Upload songs</Text>
+                    </TouchableOpacity>}
                     <TouchableOpacity style={styles.dropdownItem} onPress={() => navigateTo('Profile_page')}>
                         <Text style={styles.dropdownText}>Profile</Text>
                     </TouchableOpacity>
