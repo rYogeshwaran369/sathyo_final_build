@@ -75,7 +75,7 @@ export default class Home extends Component {
             const userData = doc.data();
             if (userData.userType === 'Instructor') {
               this.setState({ isInstructor: true });
-              this.startRequestCheck();
+              // this.startRequestCheck();
             }
           });
         } else {
@@ -87,76 +87,76 @@ export default class Home extends Component {
     }
   };
 
-  startRequestCheck = () => {
-    const userEmail = auth.currentUser?.email;
+  // startRequestCheck = () => {
+  //   const userEmail = auth.currentUser?.email;
   
-    this.intervalId = setInterval(async () => {
-      try {
-        const db = getFirestore();
-        const usersRef = collection(db, 'Users');
+  //   this.intervalId = setInterval(async () => {
+  //     try {
+  //       const db = getFirestore();
+  //       const usersRef = collection(db, 'Users');
         
-        const q = query(usersRef, where('email', '==', userEmail));
-        const querySnapshot = await getDocs(q);
+  //       const q = query(usersRef, where('email', '==', userEmail));
+  //       const querySnapshot = await getDocs(q);
   
-        if (!querySnapshot.empty) {
-          querySnapshot.forEach(async (doc) => {
-            const data = doc.data();
-            if (data.request === true) {
-              Alert.alert(
-                'Meditation Request 😄',
-                'Meditation discussion',
-                [
-                  {
-                    text: 'Add',
-                    onPress: async () => {
-                      await updateDoc(doc.ref, { availability: false, request: false });
+  //       if (!querySnapshot.empty) {
+  //         querySnapshot.forEach(async (doc) => {
+  //           const data = doc.data();
+  //           if (data.request === true) {
+  //             Alert.alert(
+  //               'Meditation Request 😄',
+  //               'Meditation discussion',
+  //               [
+  //                 {
+  //                   text: 'Add',
+  //                   onPress: async () => {
+  //                     await updateDoc(doc.ref, { availability: false, request: false });
   
-                      const q1 = query(usersRef, where('email', '==', data.chat[data.chat.length - 1]));
-                      const querySnapshot1 = await getDocs(q1);
-                      const users = [auth.currentUser.email]; // Only store the email, not the whole User object
-                      const messages = [];
-                      const timer = false;
+  //                     const q1 = query(usersRef, where('email', '==', data.chat[data.chat.length - 1]));
+  //                     const querySnapshot1 = await getDocs(q1);
+  //                     const users = [auth.currentUser.email]; // Only store the email, not the whole User object
+  //                     const messages = [];
+  //                     const timer = false;
   
-                      try {
-                        if (!querySnapshot1.empty) {
-                          querySnapshot1.forEach((doc) => {
-                            const userData = doc.data();
-                            users.push(userData.email); // Only push the user's email to the array
-                            updateDoc(doc.ref, { request: true });
-                          });
-                        }
+  //                     try {
+  //                       if (!querySnapshot1.empty) {
+  //                         querySnapshot1.forEach((doc) => {
+  //                           const userData = doc.data();
+  //                           users.push(userData.email); // Only push the user's email to the array
+  //                           updateDoc(doc.ref, { request: true });
+  //                         });
+  //                       }
   
-                        messages.push({text : "New meditation request" });
+  //                       messages.push({text : "New meditation request" });
   
-                        // Create the chat session
-                        const chatSessionRef = await addDoc(collection(db, "chatSessions"), {
-                          users: users,
-                          messages: messages,
-                          timer:false // Use serverTimestamp to track when the chat session is created
-                        });
+  //                       // Create the chat session
+  //                       const chatSessionRef = await addDoc(collection(db, "chatSessions"), {
+  //                         users: users,
+  //                         messages: messages,
+  //                         timer:false // Use serverTimestamp to track when the chat session is created
+  //                       });
   
-                        clearInterval(this.intervalId);
-                        this.props.navigation.navigate("Chat_room");
+  //                       clearInterval(this.intervalId);
+  //                       this.props.navigation.navigate("Chat_room");
   
-                      } catch (e) {
-                        console.error('Error creating chat session:', e);
-                      }
-                    },
-                  },
-                  {
-                    text: 'Close',
-                    style: 'cancel',
-                  },
-                ]
-              );
-            }
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-      }
-    }, 5000);
-  };
+  //                     } catch (e) {
+  //                       console.error('Error creating chat session:', e);
+  //                     }
+  //                   },
+  //                 },
+  //                 {
+  //                   text: 'Close',
+  //                   style: 'cancel',
+  //                 },
+  //               ]
+  //             );
+  //           }
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching user details:', error);
+  //     }
+  //   }, 5000);
+  // };
   
 
   setModalVisible = (visible, uri = '') => {

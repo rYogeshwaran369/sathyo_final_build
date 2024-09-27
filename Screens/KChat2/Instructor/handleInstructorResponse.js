@@ -18,15 +18,15 @@ export async function handleInstructorResponse(chatRequestId, accepted,navigatio
   const { instructorEmail, meditatorEmail } = chatRequest;
    
   if (accepted) {
-    await updateDoc(chatRequestRef, { status: 'accepted' });
-    
-    
     const chatRoomRef = doc(db, 'ChatRooms', chatRequestId);
     await setDoc(chatRoomRef, {
       instructorEmail,
       meditatorEmails: [meditatorEmail], 
       status: 'created',
     });
+    await updateDoc(chatRequestRef, { status: 'accepted' });
+    
+    
     console.log('Navigating to Meditation Lobby for', instructorEmail, meditatorEmail);
     console.log("Chat room created with status created")
 

@@ -24,8 +24,8 @@ export default class Login extends Component {
         const email = user.email;
         
         try {
-          // const userType = await this.getUserTypeByEmail(email);
-          // await this.storeUserType(userType);
+          const userType = await this.getUserTypeByEmail(email);
+          await this.storeUserType(userType);
   
           this.props.navigation.navigate('Home');
         } catch (error) {
@@ -67,6 +67,7 @@ export default class Login extends Component {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       const userType = await this.getUserTypeByEmail(email);
+      console.log("getUserTypeByEmail ",userType)
       await this.storeUserType(userType);
 
       console.log('User type set as:', userType);
