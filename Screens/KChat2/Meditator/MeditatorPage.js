@@ -6,6 +6,7 @@ import { auth, db } from "../../../firebase";
 import { findExisitingRooms } from '../findExisitingRooms';
 export default function MeditatorPage({ navigation }) {
   const [chatRequestId, setChatRequestId] = useState(null);
+  const [chatRoomId, setChatRoomId] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleChatRequest = async () => {
@@ -21,6 +22,7 @@ export default function MeditatorPage({ navigation }) {
       }
       else{
         //TODO : navigate , write snapshot to navigate to the lobby , or will the sanpshot from other component work? , need to check
+        setChatRoomId(roomId)
       }
     } catch (error) {
       Alert.alert('Error', 'Failed to send chat request');
@@ -44,6 +46,12 @@ export default function MeditatorPage({ navigation }) {
       return () => unsubscribe();
     }
   }, [chatRequestId]);
+
+  useEffect(() => {
+    if (chatRoomId) {
+      listenForChatRoomCreation(chatRoomId);
+    }
+  }, [chatRoomId]);
 
   const listenForChatRoomCreation = (chatRequestId) => {
     console.log("listenForChatRoomCreation called")

@@ -5,15 +5,17 @@ import { doc,onSnapshot, query, where, collection } from 'firebase/firestore';
 import { db, auth } from '../../../firebase';
 
 const MeditatorLobby = ({route}) => {
-  const chatRoomId  = route.params;
+  const {chatRoomId}  = route.params;
   const [loading, setLoading] = useState(true); 
   // const [chatRoomId, setChatRoomId] = useState(null); 
   const navigation = useNavigation();
 
   useEffect(() => {
     console.log("in meditator lobby")
-    // console.log(chatRequestId)
+    console.log("chatRoomId")
+    console.log(chatRoomId)
     const chatRoomRef = doc(db, 'ChatRooms', chatRoomId);
+
 
     const unsubscribe = onSnapshot(chatRoomRef, (docSnapshot) => {
       if (docSnapshot.exists()) { 

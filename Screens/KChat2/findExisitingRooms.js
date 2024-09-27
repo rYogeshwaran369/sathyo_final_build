@@ -19,7 +19,7 @@ export async function findExisitingRooms() {
 
     await updateDoc(chatRoomRequestRef, {
       meditatorEmails: arrayUnion(meditatorEmail), 
-      status: 'active',
+      // status: 'active',
       // timestamp: serverTimestamp(),
     });
 
