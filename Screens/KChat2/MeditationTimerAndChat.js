@@ -9,6 +9,7 @@ import { BackHandler, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
 const MeditationTimerAndChat = ({ route, navigation }) => {
+  
   const durationInMinutes = route.params?.duration || 0; 
   const songPath = route.params?.selectedSong || null;
   const chatRoomId = route.params?.chatRoomId || null;
@@ -80,10 +81,9 @@ const MeditationTimerAndChat = ({ route, navigation }) => {
     const playSound = async () => {
       try { 
         console.log('Loading sound');
-
+        console.log(songPath)
         const { sound: newSound } = await Audio.Sound.createAsync(
-          // { uri: songPath },
-          require('../../assets/Hello.mp3'),
+          { uri: songPath },
           { shouldPlay: true, isLooping: true }
         );
         setSound(newSound);

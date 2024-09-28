@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { Audio } from 'expo-av';
-import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
+import { getStorage, ref, listAll, getDownloadURL ,list ,getStream} from 'firebase/storage';
 
 import { app } from '../../firebase';
 
@@ -12,33 +12,20 @@ const SongPlayer = () => {
   const [currentSong, setCurrentSong] = useState(null);
 
   useEffect(() => {
+    console.log("1")
     setupAudio();
+    console.log("2")
     fetchSongs();
-    return sound
-      ? () => {
-          console.log('Unloading Sound');
-          sound.unloadAsync();
-        }
-      : undefined;
+    console.log(songs)
+    console.log("3")
+    return sound?() => {
+      console.log('Unloading Sound');
+      sound.unloadAsync();
+    }
+    : undefined;
+    console.log("4")
   }, []);
 
-  // const setupAudio = async () => {
-  //   try {
-  //     await Audio.setAudioModeAsync({
-  //       allowsRecordingIOS: false,
-  //       staysActiveInBackground: true,
-  //       // interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DUCK_OTHERS,
-  //       interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_MIX_WITH_OTHERS,
-  //       playsInSilentModeIOS: true,
-  //       shouldDuckAndroid: true,
-  //       // interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
-  //       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
-  //       playThroughEarpieceAndroid: false
-  //     });
-  //   } catch (error) {
-  //     console.error("Error setting audio mode:", error);
-  //   }
-  // };
   const setupAudio = async () => {
     try {
       await Audio.setAudioModeAsync({
@@ -48,15 +35,21 @@ const SongPlayer = () => {
         shouldDuckAndroid: true,
       });
     } catch (error) {
-      console.error("Error setting audio mode11:", error);
+      console.error("Error setting audio mode:", error);
     }
   };
   const fetchSongs = async () => {
+    console.log("11")
     const storage = getStorage(app);
     const listRef = ref(storage, 'gs://sathyodhayam-50d9a.appspot.com');
+    console.log("12")
     
     try {
+      console.log("13")
+      const res1 = await list(listRef);
+      console.log("res1 ",res1)
       const res = await listAll(listRef);
+      console.log("14")
       const songList = await Promise.all(
         res.items.map(async (itemRef) => {
           const url = await getDownloadURL(itemRef);
@@ -170,3 +163,6 @@ const styles = StyleSheet.create({
 });
 
 export default SongPlayer;
+
+
+
