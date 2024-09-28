@@ -24,17 +24,18 @@ const MeditatorLobby = ({route}) => {
         if (data) {
           console.log("Document updated", data);
     
-          const song = data.song || null;
+          const selectedSong = data.song || null;
+          console.log("Meditator Looby song is " , selectedSong)
           const duration = data.duration || null;
           const status = data.status || null;
     
-          if (song && duration && status === "active") {
+          if (selectedSong && duration && status === "active") {
             // setChatRoomId(docSnapshot.id);
     
             navigation.navigate('MeditationTimerAndChat', {
-              song,           
-              duration,       
               chatRoomId: docSnapshot.id, 
+              selectedSong,           
+              duration,       
             });
             setLoading(false); 
           }
