@@ -4,7 +4,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../../firebase'; // Ensure your Firebase setup is correct
+import { db } from '../../firebase'; 
 
 const UploadMp3 = () => {
   const [uploading, setUploading] = useState(false);
@@ -48,8 +48,8 @@ const UploadMp3 = () => {
         xhr.send(null);
       });
 
-      const storage = getStorage();
-      const storageRef = ref(storage, `audio/${name}`);
+      const storage = getStorage(undefined, 'gs://sathyodhayam-50d9a.appspot.com');
+      const storageRef = ref(storage, `${name}`);
 
       console.log('Starting upload...');
       const uploadTask = uploadBytesResumable(storageRef, blob);
@@ -74,6 +74,7 @@ const UploadMp3 = () => {
           const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
           console.log('Download URL:', downloadUrl);
 
+          // Save file information to Firestore
           await addDoc(collection(db, 'songs'), {
             fileName: name,
             downloadUrl: downloadUrl,
