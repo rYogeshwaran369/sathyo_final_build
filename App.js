@@ -5,9 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { ChatProvider } from './Screens/KChat2/ChatContext'; // Ensure this path is correct
 import AppStack from './Screens/Router/AppStack';
 import NotificationListener from './Screens/KChat2/NotificationListener';
-// import { useNavigation } from '@react-navigation/native';
 export default function App() {
-  // const navigation = useNavigation();
   return (
     <NavigationContainer>
       <ChatProvider >

@@ -8,13 +8,11 @@ import Forget_Password from "../Authentiction/Forget_password";
 import Email_Sent from "../Authentiction/Email_Sent";
 import News from "../News/News";
 import Podcasts from "../Podcasting/Podcasts";
-import Chat_page from "../Chat_room/Chat_page";
 import MeditationTimer from "../Meditation/MeditationTimer";
 import Meditation_Page from "../Meditation/Meditation_page";
 import Jabam from "../Meditation/Jabam";
 import AppHeader from "../../Components/AppHeader";
 import Profile from "../../Screens/Profile/Profile_page"
-import ChatPage from "../Chat_room/Chat_page";
 import MeditatorPage from "../KChat2/Meditator/MeditatorPage";
 import InstructorScreen from "../KChat2/Instructor/InstructorScreen";
 import InstructorLobby from "../KChat2/Instructor/InstructorLobby";
@@ -24,7 +22,6 @@ import SongPlayer from "../MusicPlayer/SongPlayer";
 import CommonChatPage from "../KChat2/CommonChatPage";
 import UploadMp3 from "../Upload/UploadMp3";
 import DeleteOldChatRequests from "../Utils/DeleteOldChatRequests";
-import { ChatProvider } from "../KChat2/ChatContext";
 
 const Stack = createStackNavigator();
 
@@ -33,11 +30,7 @@ export default function AppStack() {
 
         <Stack.Navigator initialRouteName="Login">
             
-            <Stack.Screen
-                name="ChatPage"
-                options={{ headerShown: false }}
-                component={ChatPage}
-            />
+            
             <Stack.Screen
                 name="Login"
                 options={{ headerShown: false }}
@@ -87,14 +80,7 @@ export default function AppStack() {
                 }}
                 component={Podcasts}
             />
-            <Stack.Screen
-                name="Chat_room"
-                options={{
-                    headerTitle: '', 
-                    header: (props) => <AppHeader {...props} /> // Use the custom header
-                }}
-                component={Chat_page}
-            />
+            
             <Stack.Screen
                 name="MeditationTimer"
                 options={{

@@ -176,7 +176,7 @@ export default class MeditationPage extends Component {
             console.log('No instructors found in the database.');
           }
         } else {
-          this.props.navigation.navigate('Chat_room');
+          // this.props.navigation.navigate('Chat_room');
         }
       } else {
         console.log('No matching user found.');
@@ -205,7 +205,7 @@ export default class MeditationPage extends Component {
             console.log('Request confirmed. Navigating to MeditationTimer.');
 
             // Navigate to the Meditation Timer screen with the selected duration
-            this.props.navigation.navigate('Chat_room');
+            // this.props.navigation.navigate('Chat_room');
           }
         }
       } catch (error) {
