@@ -18,12 +18,30 @@ export async function handleInstructorResponse(chatRequestId, accepted,navigatio
   const { instructorEmail, meditatorEmail } = chatRequest;
    
   if (accepted) {
+    //check is a room with the roomId already exits if so ,add the meditatorEmail to the array , else create the chat room GOAT logic
     const chatRoomRef = doc(db, 'ChatRooms', chatRequestId);
-    await setDoc(chatRoomRef, {
-      instructorEmail,
-      meditatorEmails: [meditatorEmail], 
-      status: 'created',
-    });
+    const chatRoomSnapshot = await getDoc(chatRoomRef);
+    
+    if (chatRoomSnapshot.exists()) {
+      const existingData = chatRoomSnapshot.data();
+      
+      if (!existingData.meditatorEmails.includes(meditatorEmail)) {
+        await updateDoc(chatRoomRef, {
+          meditatorEmails: [...existingData.meditatorEmails, meditatorEmail],
+        });
+        console.log('Added meditatorEmail to existing chat room:', meditatorEmail);
+      } else {
+        console.log('MeditatorEmail already exists in the chat room:', meditatorEmail);
+      }
+    } else {
+      await setDoc(chatRoomRef, {
+        instructorEmail,
+        meditatorEmails: [meditatorEmail],
+        status: 'created',
+        instructorMessages: [],
+      });
+      console.log('Chat room created for:', instructorEmail, meditatorEmail);
+    }
     await updateDoc(chatRequestRef, { status: 'accepted' });
     
     

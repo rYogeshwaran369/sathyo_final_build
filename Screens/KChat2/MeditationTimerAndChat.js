@@ -26,7 +26,7 @@ const MeditationTimerAndChat = ({ route, navigation }) => {
   const [showMessage, setShowMessage] = useState(false);
   const [isInstructor, setIsInstructor] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-
+  const [isSoundLoaded, setIsSoundLoaded] = useState(false);
   const messageTimerRef = useRef(null);
   const timerRef = useRef(null);
 
@@ -52,19 +52,7 @@ const MeditationTimerAndChat = ({ route, navigation }) => {
     }, [])
   );
   
-  const deleteChatRoom = async () => {
-    if (chatRoomId) {
-      const chatRoomRef = doc(db, 'ChatRooms', chatRoomId);
   
-      try {
-        // Delete the document
-        await deleteDoc(chatRoomRef);
-        console.log(`Chat room ${chatRoomId} deleted successfully.`);
-      } catch (error) {
-        console.error(`Error deleting chat room ${chatRoomId}:`, error);
-      }
-    }
-  };
 
 
   useEffect(() => {
@@ -77,16 +65,20 @@ const MeditationTimerAndChat = ({ route, navigation }) => {
     fetchUserType();
   }, []);
 
+
+  // TODO : use only one useeffect
   useEffect(() => {
+    
     const playSound = async () => {
       try { 
         console.log('Loading sound');
         console.log(songPath)
         const { sound: newSound } = await Audio.Sound.createAsync(
           { uri: songPath },
-          { shouldPlay: true, isLooping: true }
+          { shouldPlay: false, isLooping: true }
         );
         setSound(newSound);
+        setIsSoundLoaded(true);
         console.log('Sound loaded');
       } catch (error) {
         console.error('Error loading sound', error);
@@ -101,10 +93,17 @@ const MeditationTimerAndChat = ({ route, navigation }) => {
         sound.unloadAsync();
       }
     };
-  }, []); 
+  }, [songPath]); 
 
   useEffect(() => {
-    if (!isPaused) {
+    if (!isPaused && isSoundLoaded) {
+      sound.playAsync();
+      console.log('Sound playing');
+    }
+  }, [isPaused, isSoundLoaded]);
+
+  useEffect(() => {
+    if (timeLeft > 0 && !isPaused) {
       timerRef.current = setInterval(() => {
         setTimeLeft((prevTime) => {
           if (prevTime > 0) {
@@ -123,14 +122,11 @@ const MeditationTimerAndChat = ({ route, navigation }) => {
   }, [isPaused]);
   
   useEffect(() => {
-    if (timeLeft === 0 && chatRoomId) {
+    if (timeLeft === 0 ) {
       if (sound) {
         sound.stopAsync();
       }
-  
-      deleteChatRoom();
-  
-      navigation.navigate('Home');
+      navigation.goBack();
     }
   }, [timeLeft]);
 
@@ -206,7 +202,6 @@ const MeditationTimerAndChat = ({ route, navigation }) => {
           console.log('Sound paused');
         }
       } else {
-        // Resuming the sound
         if (sound) {
           await sound.playAsync(); 
           console.log('Sound playing');

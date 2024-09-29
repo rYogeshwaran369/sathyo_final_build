@@ -1,21 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { ChatProvider } from './Screens/KChat2/ChatContext'; // Ensure this path is correct
 import AppStack from './Screens/Router/AppStack';
-import Login from './Screens/Authentiction/Login';
-
-const Stack = createStackNavigator();
-
+import NotificationListener from './Screens/KChat2/NotificationListener';
+// import { useNavigation } from '@react-navigation/native';
 export default function App() {
+  // const navigation = useNavigation();
   return (
-    <>
     <NavigationContainer>
-      <AppStack/>
+      <ChatProvider >
+          <AppStack/>
+          <NotificationListener /> 
+        </ChatProvider>
     </NavigationContainer>
-    </>
-
   );
 }
 

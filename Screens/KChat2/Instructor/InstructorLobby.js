@@ -7,7 +7,7 @@ import { auth, db } from '../../../firebase';
 import { Picker } from '@react-native-picker/picker';
 
 const InstructorLobby = ({ route, navigation }) => {
-  const { meditatorEmails, chatRequestId } = route.params;
+  const { meditatorEmails, chatRoomId } = route.params;
   const [duration, setDuration] = useState('0');
   const [selectedSong, setSelectedSong] = useState('');
   const [songsList, setSongsList] = useState([]); 
@@ -42,7 +42,7 @@ const InstructorLobby = ({ route, navigation }) => {
   useEffect(() => {
     const updateChatRoom = async () => {
       try {
-        const chatRoomRef = doc(db, 'ChatRooms', chatRequestId);
+        const chatRoomRef = doc(db, 'ChatRooms', chatRoomId);
   
         await updateDoc(chatRoomRef, {
           song: selectedSong,
@@ -57,7 +57,7 @@ const InstructorLobby = ({ route, navigation }) => {
     if (selectedSong) {
       updateChatRoom();
     }
-  }, [selectedSong, duration, chatRequestId, db]);
+  }, [selectedSong, duration, chatRoomId, db]);
 
   const startMeditation = async () => {
     console.log("selectedSong  ", selectedSong);
@@ -66,7 +66,7 @@ const InstructorLobby = ({ route, navigation }) => {
       return;
     }
     
-    const chatRoomRef = doc(db, 'ChatRooms', chatRequestId);
+    const chatRoomRef = doc(db, 'ChatRooms', chatRoomId);
 
     await updateDoc(chatRoomRef, {
       status: "active"

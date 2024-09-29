@@ -64,7 +64,6 @@ const InstructorScreen = ({ navigation }) => {
           });
         }
         else {
-          // Reset states when there are no pending requests
           setChatRequestId(null);
           setMeditatorEmail(null);
           setShowModal(false);

@@ -21,13 +21,16 @@ import InstructorLobby from "../KChat2/Instructor/InstructorLobby";
 import MeditatorLobby from "../KChat2/Meditator/MeditatorLobby";
 import MeditationTimerAndChat from "../KChat2/MeditationTimerAndChat";
 import SongPlayer from "../MusicPlayer/SongPlayer";
+import CommonChatPage from "../KChat2/CommonChatPage";
 import UploadMp3 from "../Upload/UploadMp3";
-
+import DeleteOldChatRequests from "../Utils/DeleteOldChatRequests";
+import { ChatProvider } from "../KChat2/ChatContext";
 
 const Stack = createStackNavigator();
 
 export default function AppStack() {
     return (
+
         <Stack.Navigator initialRouteName="Login">
             
             <Stack.Screen
@@ -179,6 +182,23 @@ export default function AppStack() {
                 }}
                 component={UploadMp3}
             />
+            <Stack.Screen
+                name="CommonChatPage"
+                options={{
+                    headerTitle: '', 
+                    header: (props) => <AppHeader {...props} /> 
+                }}
+                component={CommonChatPage}
+            />
+            <Stack.Screen
+                name="DeleteOldChatRequests"
+                options={{
+                    headerTitle: '', 
+                    header: (props) => <AppHeader {...props} /> 
+                }}
+                component={DeleteOldChatRequests}
+            />
+            
         </Stack.Navigator>
     );
 }

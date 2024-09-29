@@ -1,22 +1,23 @@
-import React, { useEffect,useState } from 'react';
-import { View, Text, Button, Modal, StyleSheet } from 'react-native';
-import {handleInstructorResponse} from "./handleInstructorResponse"
+import React, { useEffect, useState } from 'react';
+import { View, Text, Modal, StyleSheet, TouchableOpacity } from 'react-native';
+import { handleInstructorResponse } from "./handleInstructorResponse";
 import { useNavigation } from '@react-navigation/native';
 
-const InstructorResponseModal = ({ chatRequestId, instructorEmail, meditatorEmail}) => {
+const InstructorResponseModal = ({ chatRequestId, instructorEmail, meditatorEmail,onClose   }) => {
   const [modalVisible, setModalVisible] = useState(true); 
   const navigation = useNavigation();
-  
-  
-  const handleAccept =async () => {
-    await handleInstructorResponse(chatRequestId, true,navigation); 
+
+  const handleAccept = async () => {
+    await handleInstructorResponse(chatRequestId, true, navigation); 
     setModalVisible(false); 
-    navigation.navigate('InstructorLobby',{meditatorEmails:[meditatorEmail] , chatRequestId: chatRequestId})
+    navigation.navigate('CommonChatPage', { chatRoomId: chatRequestId });
+    onClose();
   };
 
   const handleReject = async () => {
-    await handleInstructorResponse(chatRequestId, false); 
+    await handleInstructorResponse(chatRequestId, false);
     setModalVisible(false);
+    onClose();
   };
 
   return (
@@ -24,17 +25,22 @@ const InstructorResponseModal = ({ chatRequestId, instructorEmail, meditatorEmai
       transparent={true}
       animationType="slide"
       visible={modalVisible}
-      onRequestClose={() => setModalVisible(false)} 
+      onRequestClose={() => 
+        {setModalVisible(false);onClose();}
+      } 
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>New Chat Request!</Text>
-          <Text>Instructor: {instructorEmail}</Text>
-          <Text>Meditator: {meditatorEmail}</Text>
+          <Text style={styles.modalTitle}>Meditation Request</Text>
+          <Text style={styles.modalSubtitle}>Meditation discussion</Text>
           
           <View style={styles.buttonContainer}>
-            <Button title="Accept" onPress={handleAccept} color="green" />
-            <Button title="Reject" onPress={handleReject} color="red" />
+            <TouchableOpacity style={styles.addButton} onPress={handleAccept}>
+              <Text style={styles.buttonText}>Add</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.addButton} onPress={handleReject}>
+              <Text style={styles.buttonText}>reject</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -57,17 +63,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 5,
   },
-  modalText: {
-    marginBottom: 15,
+  modalTitle: {
+    marginBottom: 10,
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
+    color: '#4CAF50', 
+  },
+  modalSubtitle: {
+    marginBottom: 20,
+    textAlign: 'center',
+    fontSize: 16,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     width: '100%',
+  },
+  addButton: {
+    backgroundColor: '#007BFF', 
+    paddingVertical: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 
 export default InstructorResponseModal;
+

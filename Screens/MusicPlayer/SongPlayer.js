@@ -12,12 +12,9 @@ const SongPlayer = () => {
   const [currentSong, setCurrentSong] = useState(null);
 
   useEffect(() => {
-    console.log("1")
     setupAudio();
-    console.log("2")
     fetchSongs();
     console.log(songs)
-    console.log("3")
     return sound?() => {
       console.log('Unloading Sound');
       sound.unloadAsync();
@@ -39,17 +36,12 @@ const SongPlayer = () => {
     }
   };
   const fetchSongs = async () => {
-    console.log("11")
     const storage = getStorage(app);
     const listRef = ref(storage, 'gs://sathyodhayam-50d9a.appspot.com');
-    console.log("12")
     
     try {
-      console.log("13")
       const res1 = await list(listRef);
-      console.log("res1 ",res1)
       const res = await listAll(listRef);
-      console.log("14")
       const songList = await Promise.all(
         res.items.map(async (itemRef) => {
           const url = await getDownloadURL(itemRef);

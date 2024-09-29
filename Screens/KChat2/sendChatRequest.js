@@ -25,6 +25,7 @@ export async function sendChatRequest() {
     meditatorEmail,
     status: 'pending',
     timestamp: serverTimestamp(),
+    
   });
 
   console.log('Chat request sent to:', instructorEmail);

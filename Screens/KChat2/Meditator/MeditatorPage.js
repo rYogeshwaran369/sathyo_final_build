@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, View, Text, Alert } from 'react-native';
 import { sendChatRequest } from '../sendChatRequest';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc ,serverTimestamp} from 'firebase/firestore';
 import { auth, db } from "../../../firebase";
 import { findExisitingRooms } from '../findExisitingRooms';
 export default function MeditatorPage({ navigation }) {
@@ -23,8 +23,17 @@ export default function MeditatorPage({ navigation }) {
       else{
         //TODO : navigate , write snapshot to navigate to the lobby , or will the sanpshot from other component work? , need to check
         setChatRoomId(roomId)
+        const chatRequestRef = doc(db, 'chatRequests', roomId); // Use roomId directly as the document ID
+
+        await updateDoc(chatRequestRef, {
+          // chatRequestId: roomId,
+          meditatorEmail:auth.currentUser.email,
+          status: 'pending',
+          timestamp: serverTimestamp(),
+        });
       }
     } catch (error) {
+      console.log(error)
       Alert.alert('Error', 'Failed to send chat request');
       setLoading(false);
     }
@@ -66,9 +75,9 @@ export default function MeditatorPage({ navigation }) {
       // }
   
       const chatRoomData = snapshot.data();
-      const chatRoomId=chatRequestId;
       if (chatRoomData?.status === 'created'  && chatRoomData?.meditatorEmails.includes(auth.currentUser.email)) {
-        navigation.navigate('MeditatorLobby' , {chatRoomId});
+        // navigation.navigate('MeditatorLobby' , {chatRoomId});
+        navigation.navigate('CommonChatPage' , {chatRoomId: chatRequestId});
         setLoading(false);
       } else {
         console.log("Waiting for chat room to be created...");

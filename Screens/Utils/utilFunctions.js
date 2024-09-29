@@ -1,4 +1,8 @@
 import { PermissionsAndroid } from 'react-native';
+import { doc, onSnapshot, updateDoc, arrayUnion,deleteDoc } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, arrayUnion,deleteDoc } from 'firebase/firestore';
+import { auth, db  } from "../../firebase";
+
 
 export async function requestStoragePermission() {
   try {
@@ -21,3 +25,18 @@ export async function requestStoragePermission() {
     console.warn(err);
   }
 }
+
+
+export const deleteChatRoom = async () => {
+  if (chatRoomId) {
+    const chatRoomRef = doc(db, 'ChatRooms', chatRoomId);
+
+    try {
+      // Delete the document
+      await deleteDoc(chatRoomRef);
+      console.log(`Chat room ${chatRoomId} deleted successfully.`);
+    } catch (error) {
+      console.error(`Error deleting chat room ${chatRoomId}:`, error);
+    }
+  }
+};
