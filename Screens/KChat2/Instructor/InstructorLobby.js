@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, Alert, TextInput } from 'react-native';
+import { View, Text, Button, Alert, StyleSheet, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { getStorage, ref, listAll, getDownloadURL} from 'firebase/storage';
 import { getFirestore, addDoc, getDocs,collection, updateDoc, doc,setDoc } from 'firebase/firestore';
@@ -82,28 +82,76 @@ const InstructorLobby = ({ route, navigation }) => {
   };
 
   return (
-    <View>
-      <Text>Select Song:</Text>
-      <Picker
-        selectedValue={selectedSong}
-        onValueChange={(itemValue) => setSelectedSong(itemValue)}
-      >
-        {songsList.map((song, index) => (
-          <Picker.Item key={index} label={song.title} value={song.musicLink} />
-        ))}
-      </Picker>
+    <View style={{backgroundColor:'white',height:'100%'}}>
+    <View style={styles.formContainer}>
+    {/* Select Song */}
+    <View style={styles.formGroup}>
+      <Text style={styles.label}>Select Song:</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={selectedSong}
+          onValueChange={(itemValue) => setSelectedSong(itemValue)}
+          style={styles.picker}
+        >
+          {songsList.map((song, index) => (
+            <Picker.Item key={index} label={song.title} value={song.musicLink} />
+          ))}
+        </Picker>
+      </View>
+    </View>
 
-      <Text>Set Duration (minutes):</Text>
+    {/* Set Duration */}
+    <View style={styles.formGroup}>
+      <Text style={styles.label}>Set Duration (minutes):</Text>
       <TextInput
         value={duration}
         onChangeText={setDuration}
         placeholder="Enter duration"
         keyboardType="numeric"
+        style={styles.input}
       />
+    </View>
 
+    {/* Start Meditation Button */}
+    <View style={styles.formGroup}>
       <Button title="Start Meditation" onPress={startMeditation} />
     </View>
+  </View>
+  </View>
   );
 };
+const styles = StyleSheet.create({
+  formContainer: {
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    margin: 10,
+  },
+  formGroup: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  picker: {
+    height: 50,
+    width: '100%',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    fontSize: 16,
+  },
+});
 
 export default InstructorLobby;

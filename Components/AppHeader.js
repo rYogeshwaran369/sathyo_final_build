@@ -106,12 +106,12 @@ export default function AppHeader({ navigation }) {
                     {userType==="Instructor" && <TouchableOpacity style={styles.dropdownItem} onPress={() => navigateTo('UploadMp3')}>
                         <Text style={styles.dropdownText}>Upload songs</Text>
                     </TouchableOpacity>}
-                    {userType==="Instructor" && <TouchableOpacity style={styles.dropdownItem} onPress={() => navigateTo('DeleteOldChatRequests')}>
-                        <Text style={styles.dropdownText}>temp button</Text>
-                    </TouchableOpacity>}
-                    <TouchableOpacity style={styles.dropdownItem} onPress={() => navigateTo('SongPlayer')}>
-                        <Text style={styles.dropdownText}>Song player</Text>
-                    </TouchableOpacity>
+                    {/* {userType==="Instructor" && <TouchableOpacity style={styles.dropdownItem} onPress={() => navigateTo('DeleteOldChatRequests')}> */}
+                        {/* <Text style={styles.dropdownText}>temp button</Text> */}
+                    {/* </TouchableOpacity>} */}
+                    {/* <TouchableOpacity style={styles.dropdownItem} onPress={() => navigateTo('SongPlayer')}> */}
+                        {/* <Text style={styles.dropdownText}>Song player</Text> */}
+                    {/* </TouchableOpacity> */}
                     <TouchableOpacity style={styles.dropdownItem} onPress={() => navigateTo('Profile_page')}>
                         <Text style={styles.dropdownText}>Profile</Text>
                     </TouchableOpacity>

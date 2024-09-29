@@ -43,7 +43,10 @@ export default function AppStack() {
             />
             <Stack.Screen
                 name="Profile_page"
-                options={{ headerShown: false }} 
+                options={{
+                    headerTitle: '', 
+                    header: (props) => <AppHeader {...props} /> // Use the custom header
+                }}
                 component={Profile}
             />
             <Stack.Screen

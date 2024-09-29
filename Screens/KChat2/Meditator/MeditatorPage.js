@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, View, Text, Alert } from 'react-native';
+import { Button, View, Text, Alert, StyleSheet } from 'react-native';
 import { sendChatRequest } from '../sendChatRequest';
 import { doc, onSnapshot, updateDoc ,serverTimestamp} from 'firebase/firestore';
 import { auth, db } from "../../../firebase";
@@ -88,10 +88,10 @@ export default function MeditatorPage({ navigation }) {
   };
 
   return (
-    <View>
-      <Text>Meditator Page</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Meditator Page</Text>
       {loading ? (
-        <Text>Looking for an instructor...</Text>
+        <Text style={styles.loadingText}>Looking for an instructor...</Text>
       ) : (
         <Button title="Find Instructor and Start" onPress={handleChatRequest} />
       )}
@@ -100,7 +100,22 @@ export default function MeditatorPage({ navigation }) {
 }
 
 
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: 'gray',
+  },
+});
 
 
 

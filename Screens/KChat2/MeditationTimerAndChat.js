@@ -122,13 +122,29 @@ const MeditationTimerAndChat = ({ route, navigation }) => {
   }, [isPaused]);
   
   useEffect(() => {
-    if (timeLeft === 0 ) {
+    const endMeditation = async () => {
       if (sound) {
-        sound.stopAsync();
+        await sound.stopAsync();
       }
-      navigation.goBack();
+  
+      if (chatRoomId) {
+        try {
+          const chatRoomRef = doc(db, 'ChatRooms', chatRoomId);
+          await deleteDoc(chatRoomRef); // Deleting the chat room
+          console.log('Chat room deleted');
+        } catch (error) {
+          console.error('Error deleting chat room:', error);
+        }
+      }
+  
+      navigation.navigate('Home');
+    };
+  
+    if (timeLeft === 0) {
+      endMeditation(); // Call the function to stop sound and delete chat room
     }
   }, [timeLeft]);
+  
 
   useEffect(() => {
     if (chatRoomId) {
